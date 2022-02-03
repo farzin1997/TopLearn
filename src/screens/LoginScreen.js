@@ -8,8 +8,11 @@ import {
   Pressable,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import CustomButton from '../components/CustomButton';
 
 const LoginScreen = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [click, setClick] = useState(true);
 
   return (
@@ -27,20 +30,32 @@ const LoginScreen = () => {
           autoComplete="email"
           autoCorrect={false}
           style={styles.textInput}
+          onChangeText={text => setEmail(text)}
         />
-        <Icon name={'email'} size={25} color={'royalblue'} />
+        <View style={styles.iconContainer}>
+          <Icon name={'email'} size={25} color={'royalblue'} />
+        </View>
       </View>
       <View style={{flexDirection: 'row'}}>
         <TextInput
           placeholder="رمز عبور"
           autoComplete="password"
           autoCorrect={false}
-          style={[styles.textInput,{borderColor:click?'red':'green'}]}
+          style={styles.textInput}
           secureTextEntry={click ? true : false}
+          onChangeText={text => setPassword(text)}
         />
-        <Pressable onPress={() => setClick(!click)}>
+        <Pressable
+          style={styles.iconContainer}
+          onPress={() => setClick(!click)}>
           <Icon name={'lock'} size={25} color={'royalblue'} />
         </Pressable>
+      </View>
+      <View style={styles.button}>
+        <CustomButton
+          title={'ورود کاربر'}
+          onPress={() => console.log('email:', email, 'password:', password)}
+        />
       </View>
     </View>
   );
@@ -60,11 +75,19 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   textInput: {
-    width: 200,
-    height: 60,
+    width: '80%',
+    height: 50,
+    marginBottom: 15,
     borderWidth: 1,
-    borderColor: 'red',
-    borderRadius: 9,
+    borderRadius: 10,
     color: 'royalblue',
+    textAlign: 'center',
+  },
+  iconContainer: {
+    alignSelf: 'center',
+    marginBottom: 15,
+  },
+  button: {
+    width: '60%',
   },
 });
