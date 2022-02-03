@@ -1,18 +1,31 @@
 import React from 'react';
 import {StyleSheet, View, Image, TextInput} from 'react-native';
 import {Formik} from 'formik';
+import * as yup from 'yup';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import CustomButton from '../components/CustomButton';
+import ErrorMessage from '../components/ErrorMessage';
+
+validationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .required('ایمیل خود را وارد نکردید!')
+    .email('ایمیل معتبر نمی باشد.'),
+  password: yup
+    .string()
+    .required('رمز خود را وارد نکردید!')
+    .min(6, 'رمز نباید کمتر از 6 کاراکتر باشه!'),
+});
 
 const LoginScreen = () => {
-  
   return (
     <View style={styles.container}>
       <Image style={styles.logo} source={require('../assets/image/logo.png')} />
       <Formik
         initialValues={{email: '', password: ''}}
-        onSubmit={values => console.log(values)}>
-        {({handleChange, handleSubmit}) => (
+        onSubmit={values => console.log(values)}
+        validationSchema={validationSchema}>
+        {({handleChange, handleSubmit, errors}) => (
           <>
             <View
               style={{
@@ -32,6 +45,7 @@ const LoginScreen = () => {
                 <Icon name={'email'} size={25} color={'royalblue'} />
               </View>
             </View>
+            <ErrorMessage error={errors.email} />
             <View style={{flexDirection: 'row'}}>
               <TextInput
                 placeholder="رمز عبور"
@@ -45,8 +59,15 @@ const LoginScreen = () => {
                 <Icon name={'lock'} size={25} color={'royalblue'} />
               </View>
             </View>
+            <ErrorMessage error={errors.password} />
             <View style={styles.button}>
-              <CustomButton title={'ورود کاربر'} onPress={handleSubmit} />
+              <CustomButton
+                backgroundColor={
+                  errors.email || errors.password ? 'lightgray' : 'royalblue'
+                }
+                title={'ورود کاربر'}
+                onPress={handleSubmit}
+              />
             </View>
           </>
         )}
