@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View, Image, TextInput} from 'react-native';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import CustomButton from '../components/CustomButton';
 import ErrorMessage from '../components/ErrorMessage';
+import CustomTextInput from '../components/CustomTextInput';
 
 validationSchema = yup.object().shape({
   email: yup
@@ -18,6 +19,7 @@ validationSchema = yup.object().shape({
 });
 
 const LoginScreen = () => {
+  const [isHide, setIsHide] = useState(true);
   return (
     <View style={styles.container}>
       <Image style={styles.logo} source={require('../assets/image/logo.png')} />
@@ -25,49 +27,34 @@ const LoginScreen = () => {
         initialValues={{email: '', password: ''}}
         onSubmit={values => console.log(values)}
         validationSchema={validationSchema}>
-        {({handleChange, handleSubmit, errors}) => (
+        {({handleChange, handleSubmit, errors, setFieldTouched, touched}) => (
           <>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <TextInput
-                placeholder="ایمیل کاربری"
-                keyboardType="email-address"
-                autoComplete="email"
-                autoCorrect={false}
-                style={styles.textInput}
-                onChangeText={handleChange('email')}
-              />
-              <View style={styles.iconContainer}>
-                <Icon name={'email'} size={25} color={'royalblue'} />
-              </View>
-            </View>
-            <ErrorMessage error={errors.email} />
-            <View style={{flexDirection: 'row'}}>
-              <TextInput
-                placeholder="رمز عبور"
-                autoComplete="password"
-                autoCorrect={false}
-                style={styles.textInput}
-                secureTextEntry
-                onChangeText={handleChange('password')}
-              />
-              <View style={styles.iconContainer}>
-                <Icon name={'lock'} size={25} color={'royalblue'} />
-              </View>
-            </View>
-            <ErrorMessage error={errors.password} />
+            <CustomTextInput
+              icon={'email'}
+              placeholder="ایمیل کاربری"
+              keyboardType="email-address"
+              autoComplete="email"
+              autoCorrect={false}
+              onChangeText={handleChange('email')}
+              onBlur={() => setFieldTouched('email')}
+            />
+            <ErrorMessage error={errors.email} visible={touched} />
+
+            <CustomTextInput
+              hide={() => setIsHide(!isHide)}
+              icon={isHide ? 'eye' : 'eye-off'}
+              placeholder="رمز عبور"
+              autoComplete="password"
+              autoCorrect={false}
+              secureTextEntry={isHide ? true : false}
+              onChangeText={handleChange('password')}
+              onBlur={() => setFieldTouched('password')}
+            />
+
+            <ErrorMessage error={errors.password} visible={touched} />
+
             <View style={styles.button}>
-              <CustomButton
-                backgroundColor={
-                  errors.email || errors.password ? 'lightgray' : 'royalblue'
-                }
-                title={'ورود کاربر'}
-                onPress={handleSubmit}
-              />
+              <CustomButton title={'ورود کاربر'} onPress={handleSubmit} />
             </View>
           </>
         )}
