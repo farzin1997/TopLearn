@@ -1,13 +1,16 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Image, TextInput} from 'react-native';
+import {StyleSheet, View, Image} from 'react-native';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import CustomButton from '../components/CustomButton';
 import ErrorMessage from '../components/ErrorMessage';
 import CustomTextInput from '../components/CustomTextInput';
 
 validationSchema = yup.object().shape({
+  fullName: yup
+    .string()
+    .required('نام و نام خانودگی را وارد نکردید!')
+    .min(8, 'نام نباید کمتر از 8 کاراکتر باشد!'),
   email: yup
     .string()
     .required('ایمیل خود را وارد نکردید!')
@@ -16,45 +19,85 @@ validationSchema = yup.object().shape({
     .string()
     .required('رمز خود را وارد نکردید!')
     .min(6, 'رمز نباید کمتر از 6 کاراکتر باشه!'),
+  passwordConfirmation: yup
+    .string()
+    .required('تکرار رمز عبور الزامی می باشد')
+    .oneOf([yup.ref('password'), null], 'رمز های عبور باید یکسان باشند'),
 });
 
-const LoginScreen = () => {
+const RegisterScreen = () => {
   const [isHide, setIsHide] = useState(true);
   return (
     <View style={styles.container}>
       <Image style={styles.logo} source={require('../assets/image/logo.png')} />
       <Formik
-        initialValues={{email: '', password: ''}}
-        onSubmit={values => console.log(values)}
+        initialValues={{
+          fullName: '',
+          email: '',
+          password: '',
+          passwordConfirmation: '',
+        }}
+        onSubmit={values => console.log('register:',values)}
         validationSchema={validationSchema}>
         {({handleChange, handleSubmit, errors, setFieldTouched, touched}) => (
           <>
             <CustomTextInput
-              icon={'email'}
+              icon={'account-circle'}
               placeholder="نام و نام خانوادگی"
+              placeholderTextColor="royalblue"
+              autoCorrect={false}
+              onChangeText={handleChange('fullName')}
+              onBlur={() => setFieldTouched('fullName')}
+            />
+            <ErrorMessage error={errors.fullName} visible={touched.fullName} />
+
+            <CustomTextInput
+              icon={'email'}
+              placeholder="ایمیل کاربری"
+              placeholderTextColor="royalblue"
               keyboardType="email-address"
               autoComplete="email"
               autoCorrect={false}
               onChangeText={handleChange('email')}
               onBlur={() => setFieldTouched('email')}
             />
-            <ErrorMessage error={errors.email} visible={touched} />
+            <ErrorMessage error={errors.email} visible={touched.email} />
 
             <CustomTextInput
-              hide={() => setIsHide(!isHide)}
+                hide={() => setIsHide(!isHide)}
               icon={isHide ? 'eye' : 'eye-off'}
               placeholder="رمز عبور"
+              placeholderTextColor="royalblue"
               autoComplete="password"
               autoCorrect={false}
               secureTextEntry={isHide ? true : false}
               onChangeText={handleChange('password')}
               onBlur={() => setFieldTouched('password')}
             />
+            <ErrorMessage error={errors.password} visible={touched.password} />
 
-            <ErrorMessage error={errors.password} visible={touched} />
+            <CustomTextInput
+                hide={() => setIsHide(!isHide)}
+              icon={isHide ? 'eye' : 'eye-off'}
+              placeholder="تکرار رمز عبور"
+              placeholderTextColor="royalblue"
+              autoComplete="password"
+              autoCorrect={false}
+              secureTextEntry={isHide ? true : false}
+              onChangeText={handleChange('passwordConfirmation')}
+              onBlur={() => setFieldTouched('passwordConfirmation')}
+            />
+            <ErrorMessage
+              error={errors.passwordConfirmation}
+              visible={touched.passwordConfirmation}
+            />
 
             <View style={styles.button}>
-              <CustomButton title={'ثبت کاربر'} onPress={handleSubmit} />
+              <CustomButton
+                title={'ثبت نام کاربر'}
+                onPress={handleSubmit}
+                backgroundColor="royalblue"
+              />
             </View>
           </>
         )}
@@ -63,7 +106,7 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -75,19 +118,6 @@ const styles = StyleSheet.create({
     height: 200,
     marginTop: 20,
     marginBottom: 40,
-  },
-  textInput: {
-    width: '80%',
-    height: 50,
-    marginBottom: 15,
-    borderWidth: 1,
-    borderRadius: 10,
-    color: 'royalblue',
-    textAlign: 'center',
-  },
-  iconContainer: {
-    alignSelf: 'center',
-    marginBottom: 15,
   },
   button: {
     width: '60%',

@@ -30,10 +30,10 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 18,
-    fontFamily: 'yekan',
+    fontFamily: 'byekan',
     color: '#0c0c0c',
     textAlign: 'center',
-    width: '95%',
+    width: '95%',   
   },
   icon: {
     alignSelf: 'center',

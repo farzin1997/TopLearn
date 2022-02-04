@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Image, TextInput} from 'react-native';
+import {StyleSheet, View, Image} from 'react-native';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import CustomButton from '../components/CustomButton';
 import ErrorMessage from '../components/ErrorMessage';
 import CustomTextInput from '../components/CustomTextInput';
@@ -32,18 +31,20 @@ const LoginScreen = () => {
             <CustomTextInput
               icon={'email'}
               placeholder="ایمیل کاربری"
+              placeholderTextColor='tomato'
               keyboardType="email-address"
               autoComplete="email"
               autoCorrect={false}
               onChangeText={handleChange('email')}
               onBlur={() => setFieldTouched('email')}
             />
-            <ErrorMessage error={errors.email} visible={touched} />
+            <ErrorMessage error={errors.email} visible={touched.email} />
 
             <CustomTextInput
               hide={() => setIsHide(!isHide)}
               icon={isHide ? 'eye' : 'eye-off'}
               placeholder="رمز عبور"
+              placeholderTextColor='tomato'
               autoComplete="password"
               autoCorrect={false}
               secureTextEntry={isHide ? true : false}
@@ -51,7 +52,7 @@ const LoginScreen = () => {
               onBlur={() => setFieldTouched('password')}
             />
 
-            <ErrorMessage error={errors.password} visible={touched} />
+            <ErrorMessage error={errors.password} visible={touched.password} />
 
             <View style={styles.button}>
               <CustomButton title={'ورود کاربر'} onPress={handleSubmit} />
@@ -75,19 +76,6 @@ const styles = StyleSheet.create({
     height: 200,
     marginTop: 20,
     marginBottom: 40,
-  },
-  textInput: {
-    width: '80%',
-    height: 50,
-    marginBottom: 15,
-    borderWidth: 1,
-    borderRadius: 10,
-    color: 'royalblue',
-    textAlign: 'center',
-  },
-  iconContainer: {
-    alignSelf: 'center',
-    marginBottom: 15,
   },
   button: {
     width: '60%',
