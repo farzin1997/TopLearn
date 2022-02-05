@@ -1,11 +1,8 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Image, TextInput} from 'react-native';
-import {Formik} from 'formik';
+import {StyleSheet, View, Image} from 'react-native';
 import * as yup from 'yup';
-import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-import CustomButton from '../components/CustomButton';
-import ErrorMessage from '../components/ErrorMessage';
-import CustomTextInput from '../components/CustomTextInput';
+import {CustomForm, CustomFormField, SubmitButton} from '../components/forms';
+import Screen from '../components/shared/Screen';
 
 validationSchema = yup.object().shape({
   email: yup
@@ -21,45 +18,34 @@ validationSchema = yup.object().shape({
 const LoginScreen = () => {
   const [isHide, setIsHide] = useState(true);
   return (
-    <View style={styles.container}>
+    <Screen statusBar={'tomato'} style={styles.container}>
       <Image style={styles.logo} source={require('../assets/image/logo.png')} />
-      <Formik
+      <CustomForm
         initialValues={{email: '', password: ''}}
-        onSubmit={values => console.log(values)}
+        onSubmit={values => console.log('login:', values)}
         validationSchema={validationSchema}>
-        {({handleChange, handleSubmit, errors, setFieldTouched, touched}) => (
-          <>
-            <CustomTextInput
-              icon={'email'}
-              placeholder="ایمیل کاربری"
-              keyboardType="email-address"
-              autoComplete="email"
-              autoCorrect={false}
-              onChangeText={handleChange('email')}
-              onBlur={() => setFieldTouched('email')}
-            />
-            <ErrorMessage error={errors.email} visible={touched} />
+        <CustomFormField
+          name={'email'}
+          icon={'email'}
+          placeholder="ایمیل کاربری"
+          placeholderTextColor="tomato"
+          keyboardType="email-address"
+          autoComplete="email"
+        />
 
-            <CustomTextInput
-              hide={() => setIsHide(!isHide)}
-              icon={isHide ? 'eye' : 'eye-off'}
-              placeholder="رمز عبور"
-              autoComplete="password"
-              autoCorrect={false}
-              secureTextEntry={isHide ? true : false}
-              onChangeText={handleChange('password')}
-              onBlur={() => setFieldTouched('password')}
-            />
+        <CustomFormField
+          name={'password'}
+          hide={() => setIsHide(!isHide)}
+          icon={isHide ? 'eye' : 'eye-off'}
+          placeholder="رمز عبور"
+          placeholderTextColor="tomato"
+          autoComplete="password"
+          secureTextEntry={isHide ? true : false}
+        />
 
-            <ErrorMessage error={errors.password} visible={touched} />
-
-            <View style={styles.button}>
-              <CustomButton title={'ورود کاربر'} onPress={handleSubmit} />
-            </View>
-          </>
-        )}
-      </Formik>
-    </View>
+        <SubmitButton title={'ورود کاربر'} />
+      </CustomForm>
+    </Screen>
   );
 };
 
@@ -67,7 +53,6 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
   },
   logo: {
@@ -75,21 +60,5 @@ const styles = StyleSheet.create({
     height: 200,
     marginTop: 20,
     marginBottom: 40,
-  },
-  textInput: {
-    width: '80%',
-    height: 50,
-    marginBottom: 15,
-    borderWidth: 1,
-    borderRadius: 10,
-    color: 'royalblue',
-    textAlign: 'center',
-  },
-  iconContainer: {
-    alignSelf: 'center',
-    marginBottom: 15,
-  },
-  button: {
-    width: '60%',
   },
 });
