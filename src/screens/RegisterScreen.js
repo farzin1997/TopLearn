@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Image} from 'react-native';
-import {Formik} from 'formik';
 import * as yup from 'yup';
-import CustomButton from '../components/CustomButton';
-import ErrorMessage from '../components/ErrorMessage';
-import CustomTextInput from '../components/CustomTextInput';
+import {CustomForm, CustomFormField, SubmitButton} from '../components/forms';
+import Screen from '../components/shared/Screen';
 
 validationSchema = yup.object().shape({
   fullName: yup
@@ -28,81 +26,54 @@ validationSchema = yup.object().shape({
 const RegisterScreen = () => {
   const [isHide, setIsHide] = useState(true);
   return (
-    <View style={styles.container}>
+    <Screen statusBar={'royalblue'} style={styles.container}>
       <Image style={styles.logo} source={require('../assets/image/logo.png')} />
-      <Formik
+      <CustomForm
         initialValues={{
           fullName: '',
           email: '',
           password: '',
           passwordConfirmation: '',
         }}
-        onSubmit={values => console.log('register:',values)}
+        onSubmit={values => console.log('register:', values)}
         validationSchema={validationSchema}>
-        {({handleChange, handleSubmit, errors, setFieldTouched, touched}) => (
-          <>
-            <CustomTextInput
-              icon={'account-circle'}
-              placeholder="نام و نام خانوادگی"
-              placeholderTextColor="royalblue"
-              autoCorrect={false}
-              onChangeText={handleChange('fullName')}
-              onBlur={() => setFieldTouched('fullName')}
-            />
-            <ErrorMessage error={errors.fullName} visible={touched.fullName} />
+        <CustomFormField
+          placeholder="نام و نام خانوادگی"
+          icon={'account-circle'}
+          name={'fullName'}
+          placeholderTextColor="royalblue"
+        />
 
-            <CustomTextInput
-              icon={'email'}
-              placeholder="ایمیل کاربری"
-              placeholderTextColor="royalblue"
-              keyboardType="email-address"
-              autoComplete="email"
-              autoCorrect={false}
-              onChangeText={handleChange('email')}
-              onBlur={() => setFieldTouched('email')}
-            />
-            <ErrorMessage error={errors.email} visible={touched.email} />
+        <CustomFormField
+          placeholder="ایمیل کاربری"
+          autoComplete="email"
+          keyboardType="email-address"
+          icon={'email'}
+          name={'email'}
+          placeholderTextColor="royalblue"
+        />
 
-            <CustomTextInput
-                hide={() => setIsHide(!isHide)}
-              icon={isHide ? 'eye' : 'eye-off'}
-              placeholder="رمز عبور"
-              placeholderTextColor="royalblue"
-              autoComplete="password"
-              autoCorrect={false}
-              secureTextEntry={isHide ? true : false}
-              onChangeText={handleChange('password')}
-              onBlur={() => setFieldTouched('password')}
-            />
-            <ErrorMessage error={errors.password} visible={touched.password} />
+        <CustomFormField
+          placeholder="رمز عبور"
+          icon={isHide ? 'eye' : 'eye-off'}
+          name={'password'}
+          hide={() => setIsHide(!isHide)}
+          secureTextEntry={isHide ? true : false}
+          placeholderTextColor="royalblue"
+        />
 
-            <CustomTextInput
-                hide={() => setIsHide(!isHide)}
-              icon={isHide ? 'eye' : 'eye-off'}
-              placeholder="تکرار رمز عبور"
-              placeholderTextColor="royalblue"
-              autoComplete="password"
-              autoCorrect={false}
-              secureTextEntry={isHide ? true : false}
-              onChangeText={handleChange('passwordConfirmation')}
-              onBlur={() => setFieldTouched('passwordConfirmation')}
-            />
-            <ErrorMessage
-              error={errors.passwordConfirmation}
-              visible={touched.passwordConfirmation}
-            />
+        <CustomFormField
+          placeholder="تکرار رمز عبور"
+          icon={isHide ? 'eye' : 'eye-off'}
+          name={'passwordConfirmation'}
+          hide={() => setIsHide(!isHide)}
+          secureTextEntry={isHide ? true : false}
+          placeholderTextColor="royalblue"
+        />
 
-            <View style={styles.button}>
-              <CustomButton
-                title={'ثبت نام کاربر'}
-                onPress={handleSubmit}
-                backgroundColor="royalblue"
-              />
-            </View>
-          </>
-        )}
-      </Formik>
-    </View>
+        <SubmitButton title={'ثبت نام کاربر'} backgroundColor="royalblue" />
+      </CustomForm>
+    </Screen>
   );
 };
 
@@ -118,8 +89,5 @@ const styles = StyleSheet.create({
     height: 200,
     marginTop: 20,
     marginBottom: 40,
-  },
-  button: {
-    width: '60%',
   },
 });

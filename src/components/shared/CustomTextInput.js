@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 const CustomTextInput = ({icon, hide, ...otherProps}) => {
   return (
     <View style={styles.container}>
-      <TextInput style={styles.input} {...otherProps} />
+      <TextInput style={styles.input} {...otherProps} autoCorrect={false} />
       {icon && (
         <Pressable onPress={hide} style={styles.icon}>
           <Icon name={icon} color={'#6e6969'} size={20} style={styles.icon} />
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     fontFamily: 'byekan',
     color: '#0c0c0c',
     textAlign: 'center',
-    width: '95%',   
+    width: '95%',
   },
   icon: {
     alignSelf: 'center',
