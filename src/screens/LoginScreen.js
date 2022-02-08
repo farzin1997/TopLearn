@@ -18,7 +18,7 @@ validationSchema = yup.object().shape({
 const LoginScreen = () => {
   const [isHide, setIsHide] = useState(true);
   return (
-    <Screen statusBar={'tomato'} style={styles.container}>
+    <Screen statusBar={'royalblue'} style={styles.container}>
       <Image style={styles.logo} source={require('../assets/image/logo.png')} />
       <CustomForm
         initialValues={{email: '', password: ''}}
@@ -28,7 +28,7 @@ const LoginScreen = () => {
           name={'email'}
           icon={'email'}
           placeholder="ایمیل کاربری"
-          placeholderTextColor="tomato"
+          placeholderTextColor="royalblue"
           keyboardType="email-address"
           autoComplete="email"
         />
@@ -38,12 +38,12 @@ const LoginScreen = () => {
           hide={() => setIsHide(!isHide)}
           icon={isHide ? 'eye' : 'eye-off'}
           placeholder="رمز عبور"
-          placeholderTextColor="tomato"
+          placeholderTextColor="royalblue"
           autoComplete="password"
           secureTextEntry={isHide ? true : false}
         />
 
-        <SubmitButton title={'ورود کاربر'} />
+        <SubmitButton title={'ورود کاربر'} backgroundColor={'royalblue'} />
       </CustomForm>
     </Screen>
   );

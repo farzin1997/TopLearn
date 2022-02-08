@@ -26,7 +26,7 @@ validationSchema = yup.object().shape({
 const RegisterScreen = () => {
   const [isHide, setIsHide] = useState(true);
   return (
-    <Screen statusBar={'royalblue'} style={styles.container}>
+    <Screen statusBar={'tomato'} style={styles.container}>
       <Image style={styles.logo} source={require('../assets/image/logo.png')} />
       <CustomForm
         initialValues={{
@@ -41,7 +41,7 @@ const RegisterScreen = () => {
           placeholder="نام و نام خانوادگی"
           icon={'account-circle'}
           name={'fullName'}
-          placeholderTextColor="royalblue"
+          placeholderTextColor="tomato"
         />
 
         <CustomFormField
@@ -50,7 +50,7 @@ const RegisterScreen = () => {
           keyboardType="email-address"
           icon={'email'}
           name={'email'}
-          placeholderTextColor="royalblue"
+          placeholderTextColor="tomato"
         />
 
         <CustomFormField
@@ -59,7 +59,7 @@ const RegisterScreen = () => {
           name={'password'}
           hide={() => setIsHide(!isHide)}
           secureTextEntry={isHide ? true : false}
-          placeholderTextColor="royalblue"
+          placeholderTextColor="tomato"
         />
 
         <CustomFormField
@@ -68,10 +68,10 @@ const RegisterScreen = () => {
           name={'passwordConfirmation'}
           hide={() => setIsHide(!isHide)}
           secureTextEntry={isHide ? true : false}
-          placeholderTextColor="royalblue"
+          placeholderTextColor="tomato"
         />
 
-        <SubmitButton title={'ثبت نام کاربر'} backgroundColor="royalblue" />
+        <SubmitButton title={'ثبت نام کاربر'} />
       </CustomForm>
     </Screen>
   );
