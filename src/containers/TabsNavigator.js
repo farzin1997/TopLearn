@@ -9,6 +9,7 @@ const Tab = createBottomTabNavigator();
 const TabsNavigator = () => {
   return (
     <Tab.Navigator
+      initialRouteName="Courses"
       screenOptions={({route}) => ({
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
