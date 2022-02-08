@@ -25,10 +25,15 @@ const WelcomeScreen = ({navigation}) => {
             onPress={() => navigation.navigate('Login')}
             title={'ورود'}
             backgroundColor={'royalblue'}
-          />
+            />
           <CustomButton
             onPress={() => navigation.navigate('Register')}
             title={'ثبت نام'}
+            />
+          <CustomButton
+            onPress={() => navigation.navigate('Home')}
+            title={'اکانت کاربری'}
+            backgroundColor={'limegreen'}
           />
         </View>
       </ImageBackground>
