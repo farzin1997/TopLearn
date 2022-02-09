@@ -1,52 +1,39 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {CoursesScreen, AccountScreen, MyCoursesScreen} from '../screens';
+import TopTabNavigator from './TopTabNavigator';
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 const TabsNavigator = () => {
   return (
     <Tab.Navigator
       initialRouteName="Courses"
-      screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
-          let iconName;
-
-          if (route.name === 'Courses') {
-            iconName = focused ? 'school' : 'school';
-          } else if (route.name === 'Account') {
-            iconName = focused ? 'account-circle' : 'account-circle-outline';
-          } else if (route.name === 'MyCourses') {
-            iconName = 'message-video';
-          }
-
-          return <Icon name={iconName} size={size} color={color} />;
-        },
-      })}
-      tabBarOptions={{
-        activeTintColor: 'tomato',
-        inactiveTintColor: 'gray',
-        activeBackgroundColor: 'lightcyan',
-        labelStyle: {
-          fontFamily: 'ih',
-          fontSize: 13,
-        },
-      }}>
+      activeColor="white"
+      // inactiveColor="black"
+      barStyle={{backgroundColor: 'limegreen'}}>
       <Tab.Screen
         name="MyCourses"
         component={MyCoursesScreen}
         options={{
           tabBarLabel: 'دوره های من',
+          tabBarColor: '#3e2465',
           tabBarBadge: 3,
+          tabBarIcon: ({color}) => (
+            <Icon name="message-video" color={color} size={26} />
+          ),
         }}
       />
       <Tab.Screen
         name="Courses"
-        component={CoursesScreen}
+        component={TopTabNavigator}
         options={{
           tabBarLabel: 'دوره ها',
+          tabBarColor: 'red',
+          tabBarIcon: ({color}) => (
+            <Icon name="school" color={color} size={26} />
+          ),
         }}
       />
       <Tab.Screen
@@ -54,6 +41,10 @@ const TabsNavigator = () => {
         component={AccountScreen}
         options={{
           tabBarLabel: 'اکانت من',
+          tabBarColor: 'red',
+          tabBarIcon: ({color}) => (
+            <Icon name="account-circle" color={color} size={26} />
+          ),
         }}
       />
     </Tab.Navigator>

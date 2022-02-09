@@ -1,19 +1,14 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import Screen from '../components/shared/Screen';
+import { StyleSheet, Text, View } from 'react-native';
 
 const MyCoursesScreen = () => {
   return (
-    <Screen style={styles.container}>
-      <Text>صفحه ی دوره های بنده</Text>
-    </Screen>
+    <View>
+      <Text>dw</Text>
+    </View>
   );
 };
 
 export default MyCoursesScreen;
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-  },
-});
+const styles = StyleSheet.create({});
