@@ -4,7 +4,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import Card from '../components/shared/Card';
 import Screen from '../components/shared/Screen';
 
-const CoursesScreen = () => {
+const TopCoursesScreen = () => {
   const [courses, setCourses] = useState([
     {
       id: 1,
@@ -59,7 +59,7 @@ const CoursesScreen = () => {
   );
 };
 
-export default CoursesScreen;
+export default TopCoursesScreen;
 
 const styles = StyleSheet.create({
   container: {
