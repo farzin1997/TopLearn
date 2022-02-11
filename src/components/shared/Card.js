@@ -1,11 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
 import {numberWithCommas} from '../../utils/price';
+import CustomText from './CustomText';
 
-const Card = ({title, price, teacher, time, image}) => {
+const Card = ({title, price, teacher, time, image, courseInfo = null}) => {
   return (
     <View style={styles.card}>
-      <Image source={image} style={styles.courseImage} />
+      <Image resizeMode="center" source={image} style={styles.courseImage} />
       <View style={{padding: 20}}>
         <Text style={styles.title}>{title}</Text>
         <View style={styles.courseDetails}>
@@ -15,9 +16,27 @@ const Card = ({title, price, teacher, time, image}) => {
           <Text style={styles.time}>زمان دوره : {time}</Text>
         </View>
         <View style={styles.userContainer}>
-          <Text style={styles.teacher}> مدرس دوره : <Text style={{color:'white'}}>{teacher}</Text></Text>
+          <Text style={styles.teacher}>
+            مدرس دوره : <Text style={{color: 'white'}}>{teacher}</Text>
+          </Text>
         </View>
       </View>
+      {courseInfo ? (
+        <View>
+          <CustomText fontFamily="ih" size={16}>
+            توضیحات دوره :
+          </CustomText>
+          <ScrollView>
+            <CustomText
+              fontFamily="ih"
+              size={17}
+              color="yellow"
+              styles={styles.courseInformation}>
+              {courseInfo}
+            </CustomText>
+          </ScrollView>
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -32,6 +51,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   courseImage: {
+    borderRadius: 35,
     width: '100%',
     height: 300,
   },
@@ -63,4 +83,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: 'black',
   },
+  courseInformation: {
+    textAlign: "justify",
+    marginVertical: 10,
+    lineHeight: 25,
+},
 });

@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import {StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import Card from '../components/shared/Card';
 import Screen from '../components/shared/Screen';
 
-const CoursesScreen = () => {
+const CoursesScreen = ({navigation}) => {
   const [courses, setCourses] = useState([
     {
       id: 1,
@@ -46,13 +45,17 @@ const CoursesScreen = () => {
         data={courses}
         keyExtractor={course => course.id.toString()}
         renderItem={({item}) => (
-          <Card
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('CourseDetails', {course: item})
+            }>
+            <Card
             title={item.title}
-            time={item.time}
-            price={item.price}
-            image={item.image}
-            teacher={item.teacher}
-          />
+              price={item.price}
+              image={item.image}
+              teacher={item.teacher}
+            />
+          </TouchableOpacity>
         )}
       />
     </Screen>
