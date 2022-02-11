@@ -4,3 +4,4 @@ export {default as RegisterScreen} from './RegisterScreen';
 export {default as AccountScreen} from './AccountScreen';
 export {default as CoursesScreen} from './CoursesScreen';
 export {default as MyCoursesScreen} from './MyCoursesScreen';
+export {default as CourseDetailsScreen} from './CourseDetailsScreen';
