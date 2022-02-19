@@ -6,7 +6,11 @@ import CustomText from './CustomText';
 const Card = ({title, price, teacher, time, image, courseInfo = null}) => {
   return (
     <View style={styles.card}>
-      <Image resizeMode="center" source={image} style={styles.courseImage} />
+      <Image
+        resizeMode="center"
+        source={{uri: `https://rnapi.ghorbany.dev/${image}`}}
+        style={styles.courseImage}
+      />
       <View style={{padding: 20}}>
         <Text style={styles.title}>{title}</Text>
         <View style={styles.courseDetails}>
@@ -22,7 +26,7 @@ const Card = ({title, price, teacher, time, image, courseInfo = null}) => {
         </View>
       </View>
       {courseInfo ? (
-        <View>
+        <View style={{flex: 1}}>
           <CustomText fontFamily="ih" size={16}>
             توضیحات دوره :
           </CustomText>
@@ -30,7 +34,7 @@ const Card = ({title, price, teacher, time, image, courseInfo = null}) => {
             <CustomText
               fontFamily="ih"
               size={17}
-              color="yellow"
+              color="white"
               styles={styles.courseInformation}>
               {courseInfo}
             </CustomText>
@@ -45,10 +49,12 @@ export default Card;
 
 const styles = StyleSheet.create({
   card: {
+    flex: 1,
     borderRadius: 15,
     backgroundColor: 'limegreen',
     marginBottom: 20,
     overflow: 'hidden',
+    padding: 10,
   },
   courseImage: {
     borderRadius: 35,
@@ -84,8 +90,8 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   courseInformation: {
-    textAlign: "justify",
+    textAlign: 'justify',
     marginVertical: 10,
     lineHeight: 25,
-},
+  },
 });

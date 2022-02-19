@@ -50,7 +50,7 @@ const NewCoursesScreen = () => {
             title={item.title}
             time={item.time}
             price={item.price}
-            image={item.image}
+            image={item.urlImage}
             teacher={item.teacher}
           />
         )}

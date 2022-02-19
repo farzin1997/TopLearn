@@ -1,59 +1,48 @@
-import React, {useState} from 'react';
-import {StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import Card from '../components/shared/Card';
 import Screen from '../components/shared/Screen';
+import { fetchCourses } from "./../api";
 
 const CoursesScreen = ({navigation}) => {
-  const [courses, setCourses] = useState([
-    {
-      id: 1,
-      title: 'دوره جامع NodeJs',
-      price: '300000',
-      time: '15:00:00',
-      teacher: 'یونس قربانی',
-      image: require('../assets/image/courses/NodeJs.jpg'),
-    },
-    {
-      id: 2,
-      title: 'دوره جامع ReactJs',
-      price: '200000',
-      time: '15:00:00',
-      teacher: 'یونس قربانی',
-      image: require('../assets/image/courses/ReactJs.jpg'),
-    },
-    {
-      id: 3,
-      title: 'دوره جامع ElectronJs',
-      price: '200000',
-      time: '15:00:00',
-      teacher: 'یونس قربانی',
-      image: require('../assets/image/courses/Electron.jpg'),
-    },
-    {
-      id: 4,
-      title: 'دوره جامع React Native',
-      price: '200000',
-      teacher: 'یونس قربانی',
-      time: '15:00:00',
-      image: require('../assets/image/courses/ReactNative.jpg'),
-    },
-  ]);
+  const [loading, setLoading] = useState(true);
+  const [getCourses, setCourses] = useState([]);
+ 
+  useEffect(() => {
+    const fetchData = async () => {
+        const courses = await fetchCourses();
+        setCourses(courses);
+        setLoading(false);
+    };
+    fetchData();
+}, []);
+
   return (
     <Screen style={styles.container}>
+      {loading ? (
+        <ActivityIndicator color={'tomato'} animating={loading} />
+      ) : null}
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={courses}
-        keyExtractor={course => course.id.toString()}
+        data={getCourses}
+        keyExtractor={course => course._id.toString()}
         renderItem={({item}) => (
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('CourseDetails', {course: item})
             }>
             <Card
-            title={item.title}
+              title={item.title}
               price={item.price}
-              image={item.image}
-              teacher={item.teacher}
+              image={item.imageUrl}
+              teacher={'یونس قربانی'}
+              time={'15:00:00'}
+              courseInfo={item.courseInfo}
             />
           </TouchableOpacity>
         )}
