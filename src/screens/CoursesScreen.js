@@ -1,35 +1,15 @@
-import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
-import Card from '../components/shared/Card';
-import Screen from '../components/shared/Screen';
-import { fetchCourses } from "./../api";
+import React, {useContext} from 'react';
+import {StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {Card, Screen} from '../components/shared';
+import customContex from '../contexts/customContext';
 
 const CoursesScreen = ({navigation}) => {
-  const [loading, setLoading] = useState(true);
-  const [getCourses, setCourses] = useState([]);
- 
-  useEffect(() => {
-    const fetchData = async () => {
-        const courses = await fetchCourses();
-        setCourses(courses);
-        setLoading(false);
-    };
-    fetchData();
-}, []);
-
+  const context = useContext(customContex);
   return (
     <Screen style={styles.container}>
-      {loading ? (
-        <ActivityIndicator color={'tomato'} animating={loading} />
-      ) : null}
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={getCourses}
+        data={context.courses}
         keyExtractor={course => course._id.toString()}
         renderItem={({item}) => (
           <TouchableOpacity
