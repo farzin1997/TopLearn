@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Image} from 'react-native';
+import {StyleSheet, Image, Alert} from 'react-native';
 import * as yup from 'yup';
 import {CustomForm, CustomFormField, SubmitButton} from '../components/forms';
 import Screen from '../components/shared/Screen';
-
+import {registerUser} from '../api/users';
+import {CustomLoading} from '../components/shared';
 validationSchema = yup.object().shape({
-  fullName: yup
+  fullname: yup
     .string()
     .required('نام و نام خانودگی را وارد نکردید!')
     .min(8, 'نام نباید کمتر از 8 کاراکتر باشد!'),
@@ -22,25 +23,60 @@ validationSchema = yup.object().shape({
     .required('تکرار رمز عبور الزامی می باشد')
     .oneOf([yup.ref('password'), null], 'رمز های عبور باید یکسان باشند'),
 });
-
-const RegisterScreen = () => {
+const confirmationAlert = () => {
+  return Alert.alert(
+    'دوست من',
+    `شما قبلا این ایمیل رو ثبت کردید!`,
+    [
+      {
+        text: 'باشه',
+      },
+    ],
+    {cancelable: false},
+  );
+};
+const RegisterScreen = ({navigation}) => {
   const [isHide, setIsHide] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const handleUserRegistration = async user => {
+    try {
+      const status = await registerUser(user);
+      if (status === 201) {
+        //navigation
+        navigation.navigate('Login');
+        setLoading(false);
+      } else if (status !== 201) {
+        confirmationAlert();
+        setLoading(false);
+      } else {
+        // show err
+        console.log('Server error');
+        setLoading(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Screen statusBar={'tomato'} style={styles.container}>
       <Image style={styles.logo} source={require('../assets/image/logo.png')} />
       <CustomForm
         initialValues={{
-          fullName: '',
+          fullname: '',
           email: '',
           password: '',
           passwordConfirmation: '',
         }}
-        onSubmit={values => console.log('register:', values)}
+        onSubmit={user => {
+          console.log('register:', user);
+          setLoading(true);
+          handleUserRegistration(user);
+        }}
         validationSchema={validationSchema}>
         <CustomFormField
           placeholder="نام و نام خانوادگی"
           icon={'account-circle'}
-          name={'fullName'}
+          name={'fullname'}
           placeholderTextColor="tomato"
         />
 
@@ -73,6 +109,7 @@ const RegisterScreen = () => {
 
         <SubmitButton title={'ثبت نام کاربر'} />
       </CustomForm>
+      <CustomLoading loading={loading} />
     </Screen>
   );
 };

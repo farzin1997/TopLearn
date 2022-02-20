@@ -1,16 +1,11 @@
-import axios from "axios";
+import axios from 'axios';
 
-const url = "https://rnapi.ghorbany.dev/api";
+const url = 'https://rnapi.ghorbany.dev/api';
 
-axios.defaults.headers.post["Content-Type"] = "application/json";
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-export const fetchCourses = async () => {
-    try {
-        const {
-            data: { courses },
-        } = await axios.get(`${url}/courses`);
-        return courses;
-    } catch (err) {
-        console.log(err);
-    }
+export default {
+  get: axios.get,
+  post: axios.post,
+  url,
 };

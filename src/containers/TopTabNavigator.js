@@ -4,7 +4,7 @@ import {CoursesScreen} from '../screens';
 import NewCoursesScreen from '../screens/NewCoursesScreen';
 import TopCoursesScreen from '../screens/TopCoursesScreen';
 import customContex from '../contexts/customContext';
-import {fetchCourses} from '../api';
+import {fetchCourses} from '../api/courses';
 import {Screen} from '../components/shared';
 import {ActivityIndicator} from 'react-native';
 
