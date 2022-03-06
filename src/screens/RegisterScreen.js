@@ -4,8 +4,10 @@ import * as yup from 'yup';
 import {CustomForm, CustomFormField, SubmitButton} from '../components/forms';
 import Screen from '../components/shared/Screen';
 import {registerUser} from '../api/users';
-import {CustomLoading} from '../components/shared';
-validationSchema = yup.object().shape({
+import Toast from 'react-native-tiny-toast';
+import {customToast, loadingToast} from '../utils/toasts';
+
+const validationSchema = yup.object().shape({
   fullname: yup
     .string()
     .required('نام و نام خانودگی را وارد نکردید!')
@@ -23,35 +25,35 @@ validationSchema = yup.object().shape({
     .required('تکرار رمز عبور الزامی می باشد')
     .oneOf([yup.ref('password'), null], 'رمز های عبور باید یکسان باشند'),
 });
-const confirmationAlert = () => {
-  return Alert.alert(
-    'دوست من',
-    `شما قبلا این ایمیل رو ثبت کردید!`,
-    [
-      {
-        text: 'باشه',
-      },
-    ],
-    {cancelable: false},
-  );
-};
+// const confirmationAlert = () => {
+//   return Alert.alert(
+//     'دوست من',
+//     `شما قبلا این ایمیل رو ثبت کردید!`,
+//     [
+//       {
+//         text: 'باشه',
+//       },
+//     ],
+//     {cancelable: false},
+//   );
+// };
 const RegisterScreen = ({navigation}) => {
   const [isHide, setIsHide] = useState(true);
-  const [loading, setLoading] = useState(false);
+
   const handleUserRegistration = async user => {
     try {
+      loadingToast('ثبت نام کاربر...');
       const status = await registerUser(user);
+
       if (status === 201) {
         //navigation
-        navigation.navigate('Login');
-        setLoading(false);
-      } else if (status !== 201) {
-        confirmationAlert();
-        setLoading(false);
+        Toast.hide();
+        navigation.navigate('Login', {successRegister: true});
       } else {
-        // show err
+        // show error
+        Toast.hide();
+        customToast('شما قبلا این ایمیل رو ثبت کردید!');
         console.log('Server error');
-        setLoading(false);
       }
     } catch (err) {
       console.log(err);
@@ -69,7 +71,6 @@ const RegisterScreen = ({navigation}) => {
         }}
         onSubmit={user => {
           console.log('register:', user);
-          setLoading(true);
           handleUserRegistration(user);
         }}
         validationSchema={validationSchema}>
@@ -109,7 +110,6 @@ const RegisterScreen = ({navigation}) => {
 
         <SubmitButton title={'ثبت نام کاربر'} />
       </CustomForm>
-      <CustomLoading loading={loading} />
     </Screen>
   );
 };

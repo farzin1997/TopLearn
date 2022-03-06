@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Image} from 'react-native';
+import Toast from 'react-native-tiny-toast';
 import * as yup from 'yup';
+import {loginUser} from '../api/users';
 import {CustomForm, CustomFormField, SubmitButton} from '../components/forms';
 import Screen from '../components/shared/Screen';
+import {loadingToast, successToast} from '../utils/toasts';
 
-validationSchema = yup.object().shape({
+const validationSchema = yup.object().shape({
   email: yup
     .string()
     .required('ایمیل خود را وارد نکردید!')
@@ -15,14 +18,38 @@ validationSchema = yup.object().shape({
     .min(6, 'رمز نباید کمتر از 6 کاراکتر باشه!'),
 });
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation, route}) => {
+  useEffect(() => {
+    if (route.params.successRegister) successToast('ثبت نام موفقیت آمیز بود');
+  }, []);
+
+  const handleUserLogin = async user => {
+    try {
+      loadingToast('درحال برقراری ارتباط ...');
+      const status = await loginUser(user);
+      if (status === 200) {
+        Toast.hide();
+        successToast('ورود موفقیت آمیز بود.');
+      } else {
+        Toast.hide();
+        costomToast('ایمیل کاربری یا رمز عبور صحیح نمیباشد!');
+      }
+      navigation.navigate('Home', user);
+    } catch (err) {
+      Toast.hide();
+      console.log(err);
+    }
+  };
   const [isHide, setIsHide] = useState(true);
   return (
     <Screen statusBar={'royalblue'} style={styles.container}>
       <Image style={styles.logo} source={require('../assets/image/logo.png')} />
       <CustomForm
         initialValues={{email: '', password: ''}}
-        onSubmit={values => console.log('login:', values)}
+        // onSubmit={() => navigation.navigate('Home')}
+        onSubmit={user => {
+          handleUserLogin(user);
+        }}
         validationSchema={validationSchema}>
         <CustomFormField
           name={'email'}

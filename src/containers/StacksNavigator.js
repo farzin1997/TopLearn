@@ -14,7 +14,11 @@ const StacksNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Welcome" component={WelcomeScreen} />
-      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        initialParams={{successRegister: false}}
+      />
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="Home" component={TabsNavigator} />
       <Stack.Screen name="CourseDetails" component={CourseDetailsScreen} />

@@ -6,27 +6,32 @@ import TopCoursesScreen from '../screens/TopCoursesScreen';
 import customContex from '../contexts/customContext';
 import {fetchCourses} from '../api/courses';
 import {Screen} from '../components/shared';
-import {ActivityIndicator} from 'react-native';
+import Toast from 'react-native-tiny-toast';
+import {loadingToast} from '../utils/toasts';
 
 const TopTab = createMaterialTopTabNavigator();
 
 const TopTabNavigator = () => {
-  const [loading, setLoading] = useState(true);
   const [getCourses, setCourses] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const courses = await fetchCourses();
-      setCourses(courses);
-      setLoading(false);
-    };
-    fetchData();
+    try {
+      const fetchData = async () => {
+        loadingToast('در حال بارگزاری ...');
+        const courses = await fetchCourses();
+        setCourses(courses);
+        Toast.hide();
+      };
+      fetchData();
+    } catch (err) {
+      console.log(err);
+      Toast.hide();
+    }
   }, []);
   return (
     <customContex.Provider
       value={{
         courses: getCourses,
-        loading,
       }}>
       <Screen>
         <TopTab.Navigator
@@ -57,14 +62,6 @@ const TopTabNavigator = () => {
             options={{tabBarLabel: 'دوره های محبوب'}}
           />
         </TopTab.Navigator>
-        {loading ? (
-          <ActivityIndicator
-            color={'tomato'}
-            animating={loading}
-            style={{flex: 1}}
-            size={'large'}
-          />
-        ) : null}
       </Screen>
     </customContex.Provider>
   );

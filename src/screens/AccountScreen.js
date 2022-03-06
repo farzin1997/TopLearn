@@ -4,6 +4,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from '../components/shared/Icon';
 import ItemSeparator from '../components/shared/ItemSeparator';
 import Screen from '../components/shared/Screen';
+import {registerUser} from '../api/users';
 
 const AccountScreen = () => {
   return (
@@ -14,7 +15,7 @@ const AccountScreen = () => {
           source={require('../assets/image/logo.png')}
         />
         <View style={styles.details}>
-          <Text style={styles.title}>یونس قربانی</Text>
+          <Text style={styles.title}>{registerUser.fullname}</Text>
           <Text style={styles.subTitle}>younes.gh@chmail.ir</Text>
         </View>
         <TouchableOpacity
