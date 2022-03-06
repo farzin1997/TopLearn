@@ -1,10 +1,40 @@
-import React from 'react';
-import {StyleSheet, View, Image, ImageBackground} from 'react-native';
-import CustomButton from '../components/shared/CustomButton';
-import CustomText from '../components/shared/CustomText';
-import Screen from '../components/shared/Screen';
+import React, {useEffect} from 'react';
+import NetInfo from '@react-native-community/netinfo';
+import {
+  StyleSheet,
+  View,
+  Image,
+  ImageBackground,
+  Alert,
+  BackHandler,
+} from 'react-native';
+import {CustomButton, CustomText, Screen} from '../components/shared';
+
+const confirmationAlert = () => {
+  return Alert.alert(
+    'ارتباط با سرور',
+    `برای استفاده از اپلیکیشن باید به اینترنت متصل باشید`,
+    [
+      {
+        text: 'باشه',
+        onPress: BackHandler.exitApp,
+      },
+    ],
+    {cancelable: false},
+  );
+};
 
 const WelcomeScreen = ({navigation}) => {
+  useEffect(() => {
+    const checkForNet = async () => {
+      const state = await NetInfo.fetch();
+      console.log('connectionType : ', state.type);
+      console.log('Is connected ? ', state.isConnected);
+      if (!state.isConnected) confirmationAlert();
+    };
+    checkForNet();
+  }, []);
+
   return (
     <Screen statusBar={'limegreen'}>
       <ImageBackground
@@ -25,11 +55,11 @@ const WelcomeScreen = ({navigation}) => {
             onPress={() => navigation.navigate('Login')}
             title={'ورود'}
             backgroundColor={'royalblue'}
-            />
+          />
           <CustomButton
             onPress={() => navigation.navigate('Register')}
             title={'ثبت نام'}
-            />
+          />
           <CustomButton
             onPress={() => navigation.navigate('Home')}
             title={'اکانت کاربری'}
