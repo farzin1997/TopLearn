@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import NetInfo from '@react-native-community/netinfo';
+import {StackActions, useNavigationState} from '@react-navigation/native';
 import {
   StyleSheet,
   View,
@@ -9,6 +10,9 @@ import {
   BackHandler,
 } from 'react-native';
 import {CustomButton, CustomText, Screen} from '../components/shared';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {decodeToken} from '../utils/token';
+import {customToast} from './../utils/toasts';
 
 const confirmationAlert = () => {
   return Alert.alert(
@@ -25,12 +29,53 @@ const confirmationAlert = () => {
 };
 
 const WelcomeScreen = ({navigation}) => {
+  const screenIndex = useNavigationState(state => state.index);
+  useEffect(() => {
+    let currentCount = 0;
+    console.log(screenIndex);
+
+    if (screenIndex <= 0) {
+      BackHandler.addEventListener('hardwareBackPress', () => {
+        if (currentCount === 1) {
+          BackHandler.exitApp();
+          return true;
+        }
+
+        currentCount += 1;
+        customToast('برای خروج از اپلیکیشن،مجدد دکمه برگشت را لمس کنید.');
+
+        setTimeout(() => {
+          currentCount = 0;
+        }, 1000);
+
+        return true;
+      });
+    }
+  }, []);
+
   useEffect(() => {
     const checkForNet = async () => {
       const state = await NetInfo.fetch();
-      console.log('connectionType : ', state.type);
-      console.log('Is connected ? ', state.isConnected);
       if (!state.isConnected) confirmationAlert();
+      else {
+        const token = await AsyncStorage.getItem('token');
+        const userId = JSON.parse(await AsyncStorage.getItem('userId'));
+
+        if (token !== null && userId !== null) {
+          const decodedToken = decodeToken(token);
+          console.log(decodedToken);
+          console.log(userId);
+
+          if (decodedToken.user.userId === userId)
+            // navigation.navigate("Home");
+            navigation.dispatch(StackActions.replace('Home'));
+          else {
+            await AsyncStorage.removeItem('token');
+            await AsyncStorage.removeItem('userId');
+            navigation.navigate('Login');
+          }
+        }
+      }
     };
     checkForNet();
   }, []);
@@ -60,11 +105,11 @@ const WelcomeScreen = ({navigation}) => {
             onPress={() => navigation.navigate('Register')}
             title={'ثبت نام'}
           />
-          <CustomButton
+          {/* <CustomButton
             onPress={() => navigation.navigate('Home')}
             title={'اکانت کاربری'}
             backgroundColor={'limegreen'}
-          />
+          /> */}
         </View>
       </ImageBackground>
     </Screen>

@@ -3,14 +3,17 @@ import {StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import {Card, Screen} from '../components/shared';
 import customContex from '../contexts/customContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { decodeToken } from '../utils/jwt';
+import { decodeToken } from '../utils/token';
 
 const CoursesScreen = ({navigation}) => {
   const context = useContext(customContex);
+
   useEffect(() => {
     const myFunc = async () => {
         const token = await AsyncStorage.getItem("token");
+        console.log('decode >>>>>>>>>>');
         console.log(decodeToken(token));
+        console.log('<<<<<<<<<')
     };
     myFunc();
 }, []);

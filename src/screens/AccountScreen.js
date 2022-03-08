@@ -1,12 +1,20 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {StyleSheet, View, Image, Text, TouchableHighlight} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from '../components/shared/Icon';
 import ItemSeparator from '../components/shared/ItemSeparator';
 import Screen from '../components/shared/Screen';
-import {registerUser} from '../api/users';
+// import {registerUser} from '../api/users';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StackActions } from '@react-navigation/native';
 
-const AccountScreen = () => {
+
+const AccountScreen = ({navigation}) => {
+  const handleLogout = async () => {
+      await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("userId");
+      navigation.dispatch(StackActions.replace("Welcome"));
+  };
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
@@ -15,7 +23,7 @@ const AccountScreen = () => {
           source={require('../assets/image/logo.png')}
         />
         <View style={styles.details}>
-          <Text style={styles.title}>{registerUser.fullname}</Text>
+          <Text style={styles.title}>yones ghorbani</Text>
           <Text style={styles.subTitle}>younes.gh@chmail.ir</Text>
         </View>
         <TouchableOpacity
@@ -25,7 +33,7 @@ const AccountScreen = () => {
         </TouchableOpacity>
       </View>
       <ItemSeparator height={3} />
-      <TouchableHighlight underlayColor="pink" onPress={() => {}}>
+      <TouchableHighlight underlayColor="pink" onPress={handleLogout}>
         <View style={styles.container}>
           <Icon name="logout" backgroundColor="tomato" />
           <View style={styles.details}>
