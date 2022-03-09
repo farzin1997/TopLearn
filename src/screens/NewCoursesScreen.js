@@ -1,16 +1,17 @@
 import React, {useContext} from 'react';
 import {StyleSheet, FlatList} from 'react-native';
 import {Card, Screen} from '../components/shared';
-import customContex from '../contexts/customContext';
+import {useSelector} from 'react-redux';
 
 const NewCoursesScreen = ({navigation}) => {
-  const context = useContext(customContex);
+  const courses = useSelector(state => state.courses);
+
 
   return (
     <Screen style={styles.container}>
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={context.courses}
+        data={courses}
         keyExtractor={course => course._id.toString()}
         renderItem={({item}) => (
           <Card

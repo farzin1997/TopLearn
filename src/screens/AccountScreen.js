@@ -1,19 +1,20 @@
-import React,{useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View, Image, Text, TouchableHighlight} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from '../components/shared/Icon';
 import ItemSeparator from '../components/shared/ItemSeparator';
 import Screen from '../components/shared/Screen';
-// import {registerUser} from '../api/users';
+import {useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StackActions } from '@react-navigation/native';
-
+import {StackActions} from '@react-navigation/native';
 
 const AccountScreen = ({navigation}) => {
+  const user = useSelector(state => state.user);
+  
   const handleLogout = async () => {
-      await AsyncStorage.removeItem("token");
-      await AsyncStorage.removeItem("userId");
-      navigation.dispatch(StackActions.replace("Welcome"));
+    await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('userId');
+    navigation.dispatch(StackActions.replace('Welcome'));
   };
   return (
     <Screen style={styles.screen}>
@@ -23,8 +24,8 @@ const AccountScreen = ({navigation}) => {
           source={require('../assets/image/logo.png')}
         />
         <View style={styles.details}>
-          <Text style={styles.title}>yones ghorbani</Text>
-          <Text style={styles.subTitle}>younes.gh@chmail.ir</Text>
+          <Text style={styles.title}>{user.fullname}</Text>
+          <Text style={styles.subTitle}>{user.email}</Text>
         </View>
         <TouchableOpacity
           onPress={() => {}}

@@ -1,25 +1,24 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {CoursesScreen} from '../screens';
 import NewCoursesScreen from '../screens/NewCoursesScreen';
 import TopCoursesScreen from '../screens/TopCoursesScreen';
-import customContex from '../contexts/customContext';
-import {fetchCourses} from '../api/courses';
+import {useDispatch} from 'react-redux';
 import {Screen} from '../components/shared';
 import Toast from 'react-native-tiny-toast';
 import {loadingToast} from '../utils/toasts';
+import { getCourses } from '../redux/actions';
 
 const TopTab = createMaterialTopTabNavigator();
 
 const TopTabNavigator = () => {
-  const [getCourses, setCourses] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     try {
       const fetchData = async () => {
         loadingToast('در حال بارگزاری ...');
-        const courses = await fetchCourses();
-        setCourses(courses);
+        dispatch(getCourses());
         Toast.hide();
       };
       fetchData();
@@ -29,10 +28,6 @@ const TopTabNavigator = () => {
     }
   }, []);
   return (
-    <customContex.Provider
-      value={{
-        courses: getCourses,
-      }}>
       <Screen>
         <TopTab.Navigator
           initialRouteName="AllCourses"
@@ -63,7 +58,6 @@ const TopTabNavigator = () => {
           />
         </TopTab.Navigator>
       </Screen>
-    </customContex.Provider>
   );
 };
 

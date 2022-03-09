@@ -11,8 +11,10 @@ import {
 } from 'react-native';
 import {CustomButton, CustomText, Screen} from '../components/shared';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch} from 'react-redux';
 import {decodeToken} from '../utils/token';
 import {customToast} from './../utils/toasts';
+import {userAction} from '../redux/actions';
 
 const confirmationAlert = () => {
   return Alert.alert(
@@ -30,6 +32,8 @@ const confirmationAlert = () => {
 
 const WelcomeScreen = ({navigation}) => {
   const screenIndex = useNavigationState(state => state.index);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     let currentCount = 0;
     console.log(screenIndex);
@@ -63,9 +67,9 @@ const WelcomeScreen = ({navigation}) => {
 
         if (token !== null && userId !== null) {
           const decodedToken = decodeToken(token);
-          console.log(decodedToken);
-          console.log(userId);
 
+          dispatch(userAction(decodedToken.user));
+          
           if (decodedToken.user.userId === userId)
             // navigation.navigate("Home");
             navigation.dispatch(StackActions.replace('Home'));

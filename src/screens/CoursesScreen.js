@@ -1,28 +1,28 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import {Card, Screen} from '../components/shared';
-import customContex from '../contexts/customContext';
+import {useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { decodeToken } from '../utils/token';
+import {decodeToken} from '../utils/token';
 
 const CoursesScreen = ({navigation}) => {
-  const context = useContext(customContex);
+  const courses = useSelector(state => state.courses);
 
   useEffect(() => {
     const myFunc = async () => {
-        const token = await AsyncStorage.getItem("token");
-        console.log('decode >>>>>>>>>>');
-        console.log(decodeToken(token));
-        console.log('<<<<<<<<<')
+      const token = await AsyncStorage.getItem('token');
+      console.log('decode >>>>>>>>>>');
+      console.log(decodeToken(token));
+      console.log('<<<<<<<<<');
     };
     myFunc();
-}, []);
+  }, []);
 
   return (
     <Screen style={styles.container}>
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={context.courses}
+        data={courses}
         keyExtractor={course => course._id.toString()}
         renderItem={({item}) => (
           <TouchableOpacity
