@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Image} from 'react-native';
 import Toast from 'react-native-tiny-toast';
 import * as yup from 'yup';
+
 import {loginUser} from '../api/users';
 import {CustomForm, CustomFormField, SubmitButton} from '../components/forms';
 import Screen from '../components/shared/Screen';
@@ -30,11 +31,15 @@ const LoginScreen = ({navigation, route}) => {
       if (status === 200) {
         Toast.hide();
         successToast('ورود موفقیت آمیز بود.');
+        // navigation.navigate('Home');
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Home'}],
+        });
       } else {
         Toast.hide();
-        costomToast('ایمیل کاربری یا رمز عبور صحیح نمیباشد!');
+        costomToast('ایمیل کاربری یا رمز عبور صحیح نمی باشد!');
       }
-      navigation.navigate('Home', user);
     } catch (err) {
       Toast.hide();
       console.log(err);

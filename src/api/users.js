@@ -14,19 +14,16 @@ export const registerUser = async user => {
   }
 };
 
-export const loginUser = async user => {
+export const loginUser = async (user) => {
   try {
-    const {data, status} = await http.post(
-      `${http.url}/login`,
-      JSON.stringify(user),
-    );
-    await AsyncStorage.setItem('token', JSON.stringify(data.token));
-    const token = await AsyncStorage.getItem('token');
-    console.log('Token Is >>>>>>>',token);
-    console.log('Data Is >>>>>>>>', data);
-    console.log('Status Is >>>>>>>>', status);
-    return status;
+      const { data, status } = await http.post(
+          `${http.url}/login`,
+          JSON.stringify(user)
+      );
+      await AsyncStorage.setItem("token", JSON.stringify(data.token));
+      await AsyncStorage.setItem("userId", JSON.stringify(data.userId));
+      return status;
   } catch (err) {
-    console.log(err);
+      console.log(err);
   }
 };
